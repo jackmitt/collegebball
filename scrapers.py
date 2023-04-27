@@ -211,12 +211,11 @@ def realgm(year, month, day):
     else:
         gameUrls = pd.read_csv("./realgm_gameUrls.csv", encoding = "ISO-8859-1")["urls"].tolist()
 
-    brokenUrls = ["/ncaa/boxscore/2007-11-10/Houston-Christian-at-Saint-Louis/8691"]
     counter = 0
     if (exists("./gameStatsNew.csv")):
         A.initDictFromCsv("./gameStatsNew.csv")
         scrapedGames = pd.read_csv('./gameStatsNew.csv', encoding = "ISO-8859-1")["url"].tolist()
-        for game in scrapedGames or game in brokenUrls:
+        for game in scrapedGames:
             gameUrls.remove(game)
    # try:
     for game in gameUrls:
