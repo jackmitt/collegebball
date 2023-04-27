@@ -211,11 +211,12 @@ def realgm(year, month, day):
     else:
         gameUrls = pd.read_csv("./realgm_gameUrls.csv", encoding = "ISO-8859-1")["urls"].tolist()
 
+    brokenUrls = ["/ncaa/boxscore/2007-11-10/Houston-Christian-at-Saint-Louis/8691"]
     counter = 0
     if (exists("./gameStatsNew.csv")):
         A.initDictFromCsv("./gameStatsNew.csv")
         scrapedGames = pd.read_csv('./gameStatsNew.csv', encoding = "ISO-8859-1")["url"].tolist()
-        for game in scrapedGames:
+        for game in scrapedGames or game in brokenUrls:
             gameUrls.remove(game)
    # try:
     for game in gameUrls:
@@ -255,6 +256,7 @@ def realgm(year, month, day):
             roles = ["s","r","r","r","r","l","l","l"]
             for tr in hdc.find_all("tr"):
                 while (tr.find("strong").text == "Lim PT" and roles[0] == "r"):
+                    print ("XXX")
                     for i in range(14*5):
                         A.addCellToRow(np.nan)
                     del roles[0]
@@ -262,7 +264,9 @@ def realgm(year, month, day):
                     if (td["data-th"] != "Role"):
                         try:
                             curDude = td.find("a").text
+                            print (curDude)
                         except:
+                            print ("EXCEPTION")
                             A.addCellToRow(np.nan)
                             A.addCellToRow(np.nan)
                             A.addCellToRow(np.nan)
@@ -303,9 +307,9 @@ def realgm(year, month, day):
 
 
         A.appendRow()
-        counter += 1
-        if (counter % 100 == 1):
-            A.dictToCsv("./gameStatsNew.csv")
+        #counter += 1
+        #if (counter % 100 == 1):
+        A.dictToCsv("./gameStatsNew.csv")
     #except:
         #time.sleep(3)
         #browser.close()
